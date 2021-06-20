@@ -4,7 +4,7 @@ import XCTest
 final class CopyFrameworkTests: XCTestCase {
   enum Action: Equatable {
     case didMakeDir(Path)
-    case didMakeCopy(Path, Path)
+    case didCopyPath(Path, Path)
     case didRemovePath(Path)
     case didLipoExtract(Path, [Arch], Path)
   }
@@ -15,8 +15,8 @@ final class CopyFrameworkTests: XCTestCase {
       makeDir: .init { path in
         performedActions.append(.didMakeDir(path))
       },
-      makeCopy: .init { source, destination in
-        performedActions.append(.didMakeCopy(source, destination))
+      copyPath: .init { source, destination in
+        performedActions.append(.didCopyPath(source, destination))
       },
       removePath: .init { path in
         performedActions.append(.didRemovePath(path))
@@ -33,7 +33,7 @@ final class CopyFrameworkTests: XCTestCase {
 
     XCTAssertEqual(performedActions, [
       .didMakeDir(Path("output/path")),
-      .didMakeCopy(Path("input/Framework.framework"), Path("output/path/Framework.framework")),
+      .didCopyPath(Path("input/Framework.framework"), Path("output/path/Framework.framework")),
       .didRemovePath(Path("output/path/Framework.framework/Framework")),
       .didLipoExtract(Path("input/Framework.framework/Framework"), [.i386, .arm64], Path("output/path/Framework.framework/Framework"))
     ])

@@ -1,10 +1,10 @@
 import XCTest
 @testable import XCFrameworkMaker
 
-final class MakeCopyTests: XCTestCase {
+final class CopyPathTests: XCTestCase {
   func testHappyPath() throws {
     var didRunShellCommand = [String]()
-    let sut = MakeCopy.live(runShellCommand: .init { command in
+    let sut = CopyPath.live(runShellCommand: .init { command in
       didRunShellCommand.append(command)
       return ""
     })

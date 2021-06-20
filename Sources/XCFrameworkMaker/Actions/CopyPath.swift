@@ -1,5 +1,5 @@
 /// Creates copy of file or directory
-public struct MakeCopy {
+public struct CopyPath {
   var run: (Path, Path) throws -> Void
 
   /// Create copy of file or directory
@@ -12,7 +12,7 @@ public struct MakeCopy {
   }
 }
 
-public extension MakeCopy {
+public extension CopyPath {
   static func live(
     runShellCommand: RunShellCommand = .live()
   ) -> Self {

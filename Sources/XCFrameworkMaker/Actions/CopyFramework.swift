@@ -17,14 +17,14 @@ public struct CopyFramework {
 public extension CopyFramework {
   static func live(
     makeDir: MakeDir = .live(),
-    makeCopy: MakeCopy = .live(),
+    copyPath: CopyPath = .live(),
     removePath: RemovePath = .live(),
     lipoExtract: LipoExtract = .live()
   ) -> Self {
     .init { input, archs, path in
       try makeDir(path)
       let output = path.addingComponent(input.lastComponent)
-      try makeCopy(of: input, at: output)
+      try copyPath(of: input, at: output)
       let outputBinary = output.addingComponent(output.filenameExcludingExtension)
       try removePath(outputBinary)
       let inputBinary = input.addingComponent(input.filenameExcludingExtension)
