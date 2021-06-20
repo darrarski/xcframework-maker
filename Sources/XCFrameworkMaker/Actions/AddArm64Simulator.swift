@@ -19,7 +19,7 @@ public extension AddArm64Simulator {
     lipoThin: LipoThin = .live(),
     lipoCrate: LipoCreate = .live(),
     arm64ToSim: @escaping (String) throws -> Void = arm64ToSim(_:),
-    removePath: RemovePath = .live()
+    deletePath: DeletePath = .live()
   ) -> Self {
     .init { deviceFramework, simulatorFramework in
       let deviceBinary = deviceFramework.addingComponent(deviceFramework.filenameExcludingExtension)
@@ -28,7 +28,7 @@ public extension AddArm64Simulator {
       try lipoThin(input: deviceBinary, arch: .arm64, output: arm64Binary)
       try arm64ToSim(arm64Binary.string)
       try lipoCrate(inputs: [simulatorBinary, arm64Binary], output: simulatorBinary)
-      try removePath(arm64Binary)
+      try deletePath(arm64Binary)
     }
   }
 }

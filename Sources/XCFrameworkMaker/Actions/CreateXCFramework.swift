@@ -14,14 +14,14 @@ public struct CreateXCFramework {
 
 public extension CreateXCFramework {
   static func live(
-    removePath: RemovePath = .live(),
+    deletePath: DeletePath = .live(),
     runShellCommand: RunShellCommand = .live()
   ) -> Self {
     .init { frameworks, path in
       let frameworkOptions = frameworks.map { "-framework \($0.string)" }.joined(separator: " ")
       let frameworkName = frameworks.first?.filenameExcludingExtension ?? ""
       let output = path.addingComponent("\(frameworkName).xcframework")
-      try removePath(output)
+      try deletePath(output)
       _ = try runShellCommand("xcodebuild -create-xcframework \(frameworkOptions) -output \(output.string)")
     }
   }

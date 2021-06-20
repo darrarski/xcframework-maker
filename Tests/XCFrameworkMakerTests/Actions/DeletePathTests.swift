@@ -1,10 +1,10 @@
 import XCTest
 @testable import XCFrameworkMaker
 
-final class RemovePathTests: XCTestCase {
+final class DeletePathTests: XCTestCase {
   func testHappyPath() throws {
     var didRunShellCommand = [String]()
-    let sut = RemovePath.live(runShellCommand: .init { command in
+    let sut = DeletePath.live(runShellCommand: .init { command in
       didRunShellCommand.append(command)
       return ""
     })

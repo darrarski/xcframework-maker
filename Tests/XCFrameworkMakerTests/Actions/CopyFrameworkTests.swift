@@ -5,7 +5,7 @@ final class CopyFrameworkTests: XCTestCase {
   enum Action: Equatable {
     case didCreateDir(Path)
     case didCopyPath(Path, Path)
-    case didRemovePath(Path)
+    case didDeletePath(Path)
     case didLipoExtract(Path, [Arch], Path)
   }
 
@@ -18,8 +18,8 @@ final class CopyFrameworkTests: XCTestCase {
       copyPath: .init { source, destination in
         performedActions.append(.didCopyPath(source, destination))
       },
-      removePath: .init { path in
-        performedActions.append(.didRemovePath(path))
+      deletePath: .init { path in
+        performedActions.append(.didDeletePath(path))
       },
       lipoExtract: .init { input, archs, output in
         performedActions.append(.didLipoExtract(input, archs, output))
@@ -34,7 +34,7 @@ final class CopyFrameworkTests: XCTestCase {
     XCTAssertEqual(performedActions, [
       .didCreateDir(Path("output/path")),
       .didCopyPath(Path("input/Framework.framework"), Path("output/path/Framework.framework")),
-      .didRemovePath(Path("output/path/Framework.framework/Framework")),
+      .didDeletePath(Path("output/path/Framework.framework/Framework")),
       .didLipoExtract(Path("input/Framework.framework/Framework"), [.i386, .arm64], Path("output/path/Framework.framework/Framework"))
     ])
     XCTAssertEqual(output, path.addingComponent(input.lastComponent))

@@ -3,15 +3,15 @@ import XCTest
 
 final class CreateXCFrameworkTests: XCTestCase {
   enum Action: Equatable {
-    case didRemovePath(Path)
+    case didDeletePath(Path)
     case didRunShellCommand(String)
   }
 
   func testHappyPath() throws {
     var performedActions = [Action]()
     let sut = CreateXCFramework.live(
-      removePath: .init { path in
-        performedActions.append(.didRemovePath(path))
+      deletePath: .init { path in
+        performedActions.append(.didDeletePath(path))
       },
       runShellCommand: .init { command in
         performedActions.append(.didRunShellCommand(command))
@@ -27,7 +27,7 @@ final class CreateXCFrameworkTests: XCTestCase {
     try sut(from: frameworks, at: path)
 
     XCTAssertEqual(performedActions, [
-      .didRemovePath(Path("output/path/Framework.xcframework")),
+      .didDeletePath(Path("output/path/Framework.xcframework")),
       .didRunShellCommand("xcodebuild -create-xcframework -framework device/Framework.framework -framework simulator/Framework.framework -output output/path/Framework.xcframework")
     ])
   }

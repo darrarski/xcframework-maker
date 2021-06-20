@@ -18,7 +18,7 @@ public extension CopyFramework {
   static func live(
     createDir: CreateDir = .live(),
     copyPath: CopyPath = .live(),
-    removePath: RemovePath = .live(),
+    deletePath: DeletePath = .live(),
     lipoExtract: LipoExtract = .live()
   ) -> Self {
     .init { input, archs, path in
@@ -26,7 +26,7 @@ public extension CopyFramework {
       let output = path.addingComponent(input.lastComponent)
       try copyPath(of: input, at: output)
       let outputBinary = output.addingComponent(output.filenameExcludingExtension)
-      try removePath(outputBinary)
+      try deletePath(outputBinary)
       let inputBinary = input.addingComponent(input.filenameExcludingExtension)
       try lipoExtract.callAsFunction(input: inputBinary, archs: archs, output: outputBinary)
       return output

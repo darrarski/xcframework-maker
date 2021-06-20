@@ -6,7 +6,7 @@ final class AddArm64SimulatorTests: XCTestCase {
     case didLipoThin(Path, Arch, Path)
     case didLipoCreate([Path], Path)
     case didArm64ToSim(String)
-    case didRemovePath(Path)
+    case didDeletePath(Path)
   }
 
   func testHappyPath() throws {
@@ -21,8 +21,8 @@ final class AddArm64SimulatorTests: XCTestCase {
       arm64ToSim: { path in
         performedActions.append(.didArm64ToSim(path))
       },
-      removePath: .init { path in
-        performedActions.append(.didRemovePath(path))
+      deletePath: .init { path in
+        performedActions.append(.didDeletePath(path))
       }
     )
     let deviceFramework = Path("device/Framework.framework")
@@ -34,7 +34,7 @@ final class AddArm64SimulatorTests: XCTestCase {
       .didLipoThin(Path("device/Framework.framework/Framework"), .arm64, Path("simulator/Framework.framework/Framework-arm64")),
       .didArm64ToSim("simulator/Framework.framework/Framework-arm64"),
       .didLipoCreate([Path("simulator/Framework.framework/Framework"), Path("simulator/Framework.framework/Framework-arm64")], Path("simulator/Framework.framework/Framework")),
-      .didRemovePath(Path("simulator/Framework.framework/Framework-arm64"))
+      .didDeletePath(Path("simulator/Framework.framework/Framework-arm64"))
     ])
   }
 }

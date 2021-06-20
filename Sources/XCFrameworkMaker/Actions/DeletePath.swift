@@ -1,8 +1,8 @@
-/// Removes file or directory
-public struct RemovePath {
+/// Deletes file or directory
+public struct DeletePath {
   var run: (Path) throws -> Void
 
-  /// Remove file or directory
+  /// Delete file or directory
   /// - Parameter path: Path to file or directory to be removed
   /// - Throws: Error
   public func callAsFunction(_ path: Path) throws {
@@ -10,7 +10,7 @@ public struct RemovePath {
   }
 }
 
-public extension RemovePath {
+public extension DeletePath {
   static func live(
     runShellCommand: RunShellCommand = .live()
   ) -> Self {
