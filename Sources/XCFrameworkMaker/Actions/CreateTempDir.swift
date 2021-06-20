@@ -16,11 +16,11 @@ public extension CreateTempDir {
   static func live(
     basePath: String = FileManager.default.temporaryDirectory.path,
     randomString: @escaping () -> String = { UUID().uuidString },
-    makeDir: MakeDir = .live()
+    createDir: CreateDir = .live()
   ) -> Self {
     .init {
       let path = Path(basePath).addingComponent("XCFrameworkMaker_\(randomString())")
-      try makeDir(path)
+      try createDir(path)
       return path
     }
   }

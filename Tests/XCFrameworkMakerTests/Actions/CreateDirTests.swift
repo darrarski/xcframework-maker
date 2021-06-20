@@ -1,10 +1,10 @@
 import XCTest
 @testable import XCFrameworkMaker
 
-final class MakeDirTests: XCTestCase {
+final class CreateDirTests: XCTestCase {
   func testHappyPath() throws {
     var didRunShellCommand = [String]()
-    let sut = MakeDir.live(runShellCommand: .init { command in
+    let sut = CreateDir.live(runShellCommand: .init { command in
       didRunShellCommand.append(command)
       return ""
     })

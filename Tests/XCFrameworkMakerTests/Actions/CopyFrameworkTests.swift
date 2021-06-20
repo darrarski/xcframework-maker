@@ -3,7 +3,7 @@ import XCTest
 
 final class CopyFrameworkTests: XCTestCase {
   enum Action: Equatable {
-    case didMakeDir(Path)
+    case didCreateDir(Path)
     case didCopyPath(Path, Path)
     case didRemovePath(Path)
     case didLipoExtract(Path, [Arch], Path)
@@ -12,8 +12,8 @@ final class CopyFrameworkTests: XCTestCase {
   func testHappyPath() throws {
     var performedActions = [Action]()
     let sut = CopyFramework.live(
-      makeDir: .init { path in
-        performedActions.append(.didMakeDir(path))
+      createDir: .init { path in
+        performedActions.append(.didCreateDir(path))
       },
       copyPath: .init { source, destination in
         performedActions.append(.didCopyPath(source, destination))
@@ -32,7 +32,7 @@ final class CopyFrameworkTests: XCTestCase {
     let output = try sut(input, archs: archs, path: path)
 
     XCTAssertEqual(performedActions, [
-      .didMakeDir(Path("output/path")),
+      .didCreateDir(Path("output/path")),
       .didCopyPath(Path("input/Framework.framework"), Path("output/path/Framework.framework")),
       .didRemovePath(Path("output/path/Framework.framework/Framework")),
       .didLipoExtract(Path("input/Framework.framework/Framework"), [.i386, .arm64], Path("output/path/Framework.framework/Framework"))

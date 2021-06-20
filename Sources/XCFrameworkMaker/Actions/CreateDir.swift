@@ -1,5 +1,5 @@
 /// Creates directory
-public struct MakeDir {
+public struct CreateDir {
   var run: (Path) throws -> Void
 
   /// Create directory at provied path
@@ -10,7 +10,7 @@ public struct MakeDir {
   }
 }
 
-public extension MakeDir {
+public extension CreateDir {
   static func live(
     runShellCommand: RunShellCommand = .live()
   ) -> Self {
