@@ -53,7 +53,7 @@ OPTIONS:
         Use device-arm64 architecture slice as a simulator-arm64 architecture slice and include it
         the resulting XCFramework. This makes development possible on M1 Mac without using Rosetta.
   -output <path>          Output directory path.
-        Privide path to a directiory where resulting XCFramework should be created. Eg
+        Provide a path to a directory where the resulting XCFramework should be created. Eg
         "path/to/output/directory"
   -help, -h               Show help information.
 ```
@@ -74,7 +74,7 @@ OPTIONS:
       -output output/path
   ```
 
-4. Resulting XCFramework will be created in provided output directory:
+4. Resulting XCFramework will be created in the provided output directory:
 
   ```sh
   output/path/GoogleInteractiveMediaAds.xcframework

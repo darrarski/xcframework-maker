@@ -60,7 +60,7 @@ struct MainCommand: ParsableCommand {
     name: .customLong("output", withSingleDash: true),
     help: ArgumentHelp(
       "Output directory path.",
-      discussion: "Privide path to a directiory where resulting XCFramework should be created. Eg \"path/to/output/directory\"",
+      discussion: "Provide a path to a directory where the resulting XCFramework should be created. Eg \"path/to/output/directory\"",
       valueName: "path"
     ),
     completion: .directory
