@@ -4,7 +4,7 @@
 ![platform macOS](https://img.shields.io/badge/platform-macOS-blue)
 ![SPM supported](https://img.shields.io/badge/SPM-supported-green)
 
-macOS utility for creating SPM-compatible XCFramework from a legacy fat-framework.
+macOS utility for converting fat-frameworks to SPM-compatible XCFramework with arm64-simulator support.
 
 ## 📝 Description
 
