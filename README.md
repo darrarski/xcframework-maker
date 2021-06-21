@@ -61,24 +61,24 @@ OPTIONS:
 ### Example - GoogleInteractiveMediaAds
 
 1. Download GoogleInteractiveMediaAds fat-frameworks from Google website:
-  - [IMA SDK for iOS](https://developers.google.com/interactive-media-ads/docs/sdks/ios/dai/download)
-  - [IMA SDK for tvOS](https://developers.google.com/interactive-media-ads/docs/sdks/tvos/dai/download)
+    - [IMA SDK for iOS](https://developers.google.com/interactive-media-ads/docs/sdks/ios/dai/download)
+    - [IMA SDK for tvOS](https://developers.google.com/interactive-media-ads/docs/sdks/tvos/dai/download)
 2. Unzip downloaded files.
 3. Run `make-xcframework`:
 
-  ```sh
-  make-xcframework \
+    ```sh
+    make-xcframework \
       -ios path/to/ios/GoogleInteractiveMediaAds.framework \
       -tvos path/to/tvos/GoogleInteractiveMediaAds.framework \
       -arm64sim \
       -output output/path
-  ```
+    ```
 
 4. Resulting XCFramework will be created in the provided output directory:
 
-  ```sh
-  output/path/GoogleInteractiveMediaAds.xcframework
-  ```
+    ```sh
+    output/path/GoogleInteractiveMediaAds.xcframework
+    ```
 
 ## ☕️ Do you like the project?
 
