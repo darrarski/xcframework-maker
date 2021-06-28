@@ -23,6 +23,10 @@ public extension CopyFramework {
     lipoExtract: LipoExtract = .live()
   ) -> Self {
     .init { input, archs, path, log in
+      log?(.normal, "[CopyFramework]")
+      log?(.verbose, "- input: \(input.string)")
+      log?(.verbose, "- archs: \(archs.map(\.rawValue).joined(separator: ", "))")
+      log?(.verbose, "- path: \(path.string)")
       try createDir(path, log?.indented())
       let output = path.addingComponent(input.lastComponent)
       try copyPath(of: input, at: output, log?.indented())
@@ -30,6 +34,7 @@ public extension CopyFramework {
       try deletePath(outputBinary, log?.indented())
       let inputBinary = input.addingComponent(input.filenameExcludingExtension)
       try lipoExtract.callAsFunction(input: inputBinary, archs: archs, output: outputBinary, log?.indented())
+      log?(.verbose, "- output: \(output.string)")
       return output
     }
   }
