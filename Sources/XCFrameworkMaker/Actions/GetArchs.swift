@@ -18,11 +18,14 @@ public extension GetArchs {
     runShellCommand: RunShellCommand = .live()
   ) -> Self {
     .init { frameworkPath, log in
+      log?(.normal, "[GetArchs]")
+      log?(.verbose, "- frameworkPath: \(frameworkPath.string)")
       let frameworkName = frameworkPath.filenameExcludingExtension
       let binaryPath = frameworkPath.addingComponent(frameworkName)
       let archs = try runShellCommand("lipo \(binaryPath.string) -archs", log?.indented())
         .components(separatedBy: " ")
         .compactMap(Arch.init(rawValue:))
+      log?(.verbose, "- archs: \(archs.map(\.rawValue).joined(separator: ", "))")
       return archs
     }
   }
