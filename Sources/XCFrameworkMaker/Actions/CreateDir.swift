@@ -17,6 +17,8 @@ public extension CreateDir {
     runShellCommand: RunShellCommand = .live()
   ) -> Self {
     .init { path, log in
+      log?(.normal, "[CreateDir]")
+      log?(.verbose, "- path: \(path.string)")
       _ = try runShellCommand("mkdir -p \(path.string)", log?.indented())
     }
   }
