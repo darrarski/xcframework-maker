@@ -19,6 +19,9 @@ public extension CreateXCFramework {
     runShellCommand: RunShellCommand = .live()
   ) -> Self {
     .init { frameworks, path, log in
+      log?(.normal, "[CreateXCFramework]")
+      log?(.verbose, "- frameworks: \n\t\(frameworks.map(\.string).joined(separator: "\n\t"))")
+      log?(.verbose, "- path: \(path.string)")
       let frameworkOptions = frameworks.map { "-framework \($0.string)" }.joined(separator: " ")
       let frameworkName = frameworks.first?.filenameExcludingExtension ?? ""
       let output = path.addingComponent("\(frameworkName).xcframework")
