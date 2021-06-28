@@ -17,6 +17,8 @@ public extension DeletePath {
     runShellCommand: RunShellCommand = .live()
   ) -> Self {
     .init { path, log in
+      log?(.normal, "[DeletePath]")
+      log?(.verbose, "- path: \(path.string)")
       _ = try runShellCommand("rm -Rf \(path.string)", log?.indented())
     }
   }

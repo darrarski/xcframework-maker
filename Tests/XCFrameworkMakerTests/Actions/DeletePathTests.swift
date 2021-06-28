@@ -2,16 +2,28 @@ import XCTest
 @testable import XCFrameworkMaker
 
 final class DeletePathTests: XCTestCase {
+  enum Action: Equatable {
+    case didRunShellCommand(String)
+    case didLog(LogLevel, String)
+  }
+
   func testHappyPath() throws {
-    var didRunShellCommand = [String]()
+    var performedActions = [Action]()
     let sut = DeletePath.live(runShellCommand: .init { command, _ in
-      didRunShellCommand.append(command)
+      performedActions.append(.didRunShellCommand(command))
       return ""
     })
     let path = Path("some/path")
+    let log = Log { level, message in
+      performedActions.append(.didLog(level, message))
+    }
 
-    try sut(path)
+    try sut(path, log)
 
-    XCTAssertEqual(didRunShellCommand, ["rm -Rf some/path"])
+    XCTAssertEqual(performedActions, [
+      .didLog(.normal, "[DeletePath]"),
+      .didLog(.verbose, "- path: \(path.string)"),
+      .didRunShellCommand("rm -Rf some/path")
+    ])
   }
 }
