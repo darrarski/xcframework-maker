@@ -19,6 +19,10 @@ public extension LipoThin {
     runShellCommand: RunShellCommand = .live()
   ) -> Self {
     .init { input, arch, output, log in
+      log?(.normal, "[LipoThin]")
+      log?(.verbose, "- input: \(input.string)")
+      log?(.verbose, "- arch: \(arch.rawValue)")
+      log?(.verbose, "- output: \(output.string)")
       _ = try runShellCommand(
         "lipo \(input.string) -thin \(arch.rawValue) -output \(output.string)",
         log?.indented()
