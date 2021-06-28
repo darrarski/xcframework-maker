@@ -8,6 +8,7 @@ final class MakeXCFrameworkTests: XCTestCase {
     case didCopyFramework(Path, [Arch], Path)
     case didAddArm64Simulator(Path, Path)
     case didCreateXCFramework([Path], Path)
+    case didLog(LogLevel, String)
   }
 
   func testHappyPath() throws {
@@ -44,10 +45,19 @@ final class MakeXCFrameworkTests: XCTestCase {
       }
     )
     let output = Path("output/path")
+    let log = Log { level, message in
+      performedActions.append(.didLog(level, message))
+    }
 
-    try sut.callAsFunction(iOS: iOSPath, tvOS: tvOSPath, arm64sim: true, at: output)
+    try sut.callAsFunction(iOS: iOSPath, tvOS: tvOSPath, arm64sim: true, at: output, log)
 
     XCTAssertEqual(performedActions, [
+      .didLog(.normal, "[MakeXCFramework]"),
+      .didLog(.verbose, "- iOSPath: \(iOSPath.string)"),
+      .didLog(.verbose, "- tvOSPath: \(tvOSPath.string)"),
+      .didLog(.verbose, "- arm64sim: true"),
+      .didLog(.verbose, "- output: \(output.string)"),
+
       .didCreateTempDir,
 
       .didGetArchs(iOSPath),

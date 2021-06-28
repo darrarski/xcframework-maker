@@ -42,6 +42,12 @@ public extension MakeXCFramework {
     createXCFramework: CreateXCFramework = .live()
   ) -> Self {
     .init { iOSPath, tvOSPath, arm64sim, output, log in
+      log?(.normal, "[MakeXCFramework]")
+      log?(.verbose, "- iOSPath: \(iOSPath?.string ?? "nil")")
+      log?(.verbose, "- tvOSPath: \(tvOSPath?.string ?? "nil")")
+      log?(.verbose, "- arm64sim: \(arm64sim)")
+      log?(.verbose, "- output: \(output.string)")
+
       guard iOSPath != nil || tvOSPath != nil else {
         throw EmptyInputError()
       }
