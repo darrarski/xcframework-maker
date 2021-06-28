@@ -18,6 +18,9 @@ public extension CopyPath {
     runShellCommand: RunShellCommand = .live()
   ) -> Self {
     .init { source, destination, log in
+      log?(.normal, "[CopyPath]")
+      log?(.verbose, "- source: \(source.string)")
+      log?(.verbose, "- destination: \(destination.string)")
       _ = try runShellCommand("cp -fR \(source.string) \(destination.string)", log?.indented())
     }
   }
