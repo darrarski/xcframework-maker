@@ -19,6 +19,10 @@ public extension LipoExtract {
     runShellCommand: RunShellCommand = .live()
   ) -> Self {
     .init { input, archs, output, log in
+      log?(.normal, "[LipoExtract]")
+      log?(.verbose, "- input: \(input.string)")
+      log?(.verbose, "- archs: \(archs.map(\.rawValue).joined(separator: ", "))")
+      log?(.verbose, "- output: \(input.string)")
       let extract = archs.map { "-extract \($0)" }.joined(separator: " ")
       _ = try runShellCommand("lipo \(input.string) \(extract) -output \(output.string)", log?.indented())
     }
