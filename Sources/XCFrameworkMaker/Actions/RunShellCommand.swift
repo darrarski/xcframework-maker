@@ -20,7 +20,10 @@ public extension RunShellCommand {
     shellOut: @escaping (String) throws -> String = { try shellOut(to: $0) }
   ) -> Self {
     .init { command, log in
+      log?(.normal, "[RunShellCommand]")
+      log?(.verbose, "- command: \(command)")
       let output = try shellOut(command)
+      log?(.verbose, "- output: \(output)")
       return output
     }
   }
