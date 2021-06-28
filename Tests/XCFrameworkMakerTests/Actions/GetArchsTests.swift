@@ -4,7 +4,7 @@ import XCTest
 final class GetArchsTests: XCTestCase {
   func testHappyPath() throws {
     var didRunShellCommand = [String]()
-    let sut = GetArchs.live(runShellCommand: .init { command in
+    let sut = GetArchs.live(runShellCommand: .init { command, _ in
       didRunShellCommand.append(command)
       return "i386 arm64 unknown"
     })

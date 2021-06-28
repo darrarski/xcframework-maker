@@ -4,7 +4,7 @@ import XCTest
 final class CopyPathTests: XCTestCase {
   func testHappyPath() throws {
     var didRunShellCommand = [String]()
-    let sut = CopyPath.live(runShellCommand: .init { command in
+    let sut = CopyPath.live(runShellCommand: .init { command, _ in
       didRunShellCommand.append(command)
       return ""
     })

@@ -24,22 +24,22 @@ final class MakeXCFrameworkTests: XCTestCase {
     ]
     var performedActions = [Action]()
     let sut = MakeXCFramework.live(
-      createTempDir: .init {
+      createTempDir: .init { _ in
         performedActions.append(.didCreateTempDir)
         return createdTempDir
       },
-      getArchs: .init { path in
+      getArchs: .init { path, _ in
         performedActions.append(.didGetArchs(path))
         return archs[path]!
       },
-      copyFramework: .init { input, archs, path in
+      copyFramework: .init { input, archs, path, _ in
         performedActions.append(.didCopyFramework(input, archs, path))
         return copiedFrameworks[input]!
       },
-      addArm64Simulator: .init { device, simulator in
+      addArm64Simulator: .init { device, simulator, _ in
         performedActions.append(.didAddArm64Simulator(device, simulator))
       },
-      createXCFramework: .init { frameworks, path in
+      createXCFramework: .init { frameworks, path, _ in
         performedActions.append(.didCreateXCFramework(frameworks, path))
       }
     )
@@ -71,10 +71,10 @@ final class MakeXCFrameworkTests: XCTestCase {
 
   func testEmptyInputFailure() {
     let sut = MakeXCFramework.live(
-      createTempDir: .init { fatalError() },
-      getArchs: .init { _ in fatalError() },
-      copyFramework: .init { _, _, _ in fatalError() },
-      createXCFramework: .init { _, _ in fatalError() }
+      createTempDir: .init { _ in fatalError() },
+      getArchs: .init { _, _ in fatalError() },
+      copyFramework: .init { _, _, _, _ in fatalError() },
+      createXCFramework: .init { _, _, _ in fatalError() }
     )
     var catchedError: Error?
 

@@ -9,7 +9,7 @@ final class CreateTempDirTests: XCTestCase {
     let sut = CreateTempDir.live(
       basePath: basePath,
       randomString: { randomString },
-      createDir: .init { didCreateDir.append($0) }
+      createDir: .init { path, _ in didCreateDir.append(path) }
     )
 
     let path = try sut()

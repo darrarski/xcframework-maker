@@ -10,10 +10,10 @@ final class CreateXCFrameworkTests: XCTestCase {
   func testHappyPath() throws {
     var performedActions = [Action]()
     let sut = CreateXCFramework.live(
-      deletePath: .init { path in
+      deletePath: .init { path, _ in
         performedActions.append(.didDeletePath(path))
       },
-      runShellCommand: .init { command in
+      runShellCommand: .init { command, _ in
         performedActions.append(.didRunShellCommand(command))
         return ""
       }

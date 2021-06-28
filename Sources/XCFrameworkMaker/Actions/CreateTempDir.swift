@@ -2,13 +2,14 @@ import Foundation
 
 /// Creates new temporary directory
 public struct CreateTempDir {
-  var run: () throws -> Path
+  var run: (Log?) throws -> Path
 
   /// Create new temporary directory and return its path
+  /// - Parameter log: Log action (defaults to nil for no logging)
   /// - Throws: Error
   /// - Returns: Path to new temporary directory
-  public func callAsFunction() throws -> Path {
-    try run()
+  public func callAsFunction(_ log: Log? = nil) throws -> Path {
+    try run(log)
   }
 }
 
@@ -18,9 +19,9 @@ public extension CreateTempDir {
     randomString: @escaping () -> String = { UUID().uuidString },
     createDir: CreateDir = .live()
   ) -> Self {
-    .init {
+    .init { log in
       let path = Path(basePath).addingComponent("XCFrameworkMaker_\(randomString())")
-      try createDir(path)
+      try createDir(path, log?.indented())
       return path
     }
   }

@@ -4,7 +4,7 @@ import XCTest
 final class LipoThinTests: XCTestCase {
   func testHappyPath() throws {
     var didRunShellCommand = [String]()
-    let sut = LipoThin.live(runShellCommand: .init { command in
+    let sut = LipoThin.live(runShellCommand: .init { command, _ in
       didRunShellCommand.append(command)
       return ""
     })

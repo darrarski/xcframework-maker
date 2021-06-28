@@ -12,16 +12,16 @@ final class AddArm64SimulatorTests: XCTestCase {
   func testHappyPath() throws {
     var performedActions = [Action]()
     let sut = AddArm64Simulator.live(
-      lipoThin: .init { input, arch, output in
+      lipoThin: .init { input, arch, output, _ in
         performedActions.append(.didLipoThin(input, arch, output))
       },
-      lipoCrate: .init { input, output in
+      lipoCrate: .init { input, output, _ in
         performedActions.append(.didLipoCreate(input, output))
       },
       arm64ToSim: { path in
         performedActions.append(.didArm64ToSim(path))
       },
-      deletePath: .init { path in
+      deletePath: .init { path, _ in
         performedActions.append(.didDeletePath(path))
       }
     )

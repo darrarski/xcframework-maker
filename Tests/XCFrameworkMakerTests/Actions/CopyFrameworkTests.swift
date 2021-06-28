@@ -12,16 +12,16 @@ final class CopyFrameworkTests: XCTestCase {
   func testHappyPath() throws {
     var performedActions = [Action]()
     let sut = CopyFramework.live(
-      createDir: .init { path in
+      createDir: .init { path, _ in
         performedActions.append(.didCreateDir(path))
       },
-      copyPath: .init { source, destination in
+      copyPath: .init { source, destination, _ in
         performedActions.append(.didCopyPath(source, destination))
       },
-      deletePath: .init { path in
+      deletePath: .init { path, _ in
         performedActions.append(.didDeletePath(path))
       },
-      lipoExtract: .init { input, archs, output in
+      lipoExtract: .init { input, archs, output, _ in
         performedActions.append(.didLipoExtract(input, archs, output))
       }
     )
