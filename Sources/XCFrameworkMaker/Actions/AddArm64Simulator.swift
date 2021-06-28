@@ -23,6 +23,9 @@ public extension AddArm64Simulator {
     deletePath: DeletePath = .live()
   ) -> Self {
     .init { deviceFramework, simulatorFramework, log in
+      log?(.normal, "[AddArm64Simulator]")
+      log?(.verbose, "- deviceFramework: \(deviceFramework.string)")
+      log?(.verbose, "- simulatorFramework: \(simulatorFramework.string)")
       let deviceBinary = deviceFramework.addingComponent(deviceFramework.filenameExcludingExtension)
       let simulatorBinary = simulatorFramework.addingComponent(simulatorFramework.filenameExcludingExtension)
       let arm64Binary = Path("\(simulatorBinary.string)-arm64")
