@@ -18,6 +18,9 @@ public extension LipoCreate {
     runShellCommand: RunShellCommand = .live()
   ) -> Self {
     .init { inputs, output, log in
+      log?(.normal, "[LipoCreate]")
+      log?(.verbose, "- inputs: \n\t\(inputs.map(\.string).joined(separator: "\n\t"))")
+      log?(.verbose, "- output: \(output.string)")
       let input = inputs.map(\.string).joined(separator: " ")
       _ = try runShellCommand("lipo \(input) -create -output \(output.string)", log?.indented())
     }
