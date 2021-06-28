@@ -20,8 +20,10 @@ public extension CreateTempDir {
     createDir: CreateDir = .live()
   ) -> Self {
     .init { log in
+      log?(.normal, "[CreateTempDir]")
       let path = Path(basePath).addingComponent("XCFrameworkMaker_\(randomString())")
       try createDir(path, log?.indented())
+      log?(.verbose, "- path: \(path.string)")
       return path
     }
   }
