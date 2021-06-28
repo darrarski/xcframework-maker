@@ -8,19 +8,19 @@ final class GetArchsTests: XCTestCase {
   }
 
   func testHappyPath() throws {
-    var performedActions = [Action]()
+    var didPerformActions = [Action]()
     let sut = GetArchs.live(runShellCommand: .init { command, _ in
-      performedActions.append(.didRunShellCommand(command))
+      didPerformActions.append(.didRunShellCommand(command))
       return "i386 arm64 unknown"
     })
     let frameworkPath = Path("path/to/Some.framework")
     let log = Log { level, message in
-      performedActions.append(.didLog(level, message))
+      didPerformActions.append(.didLog(level, message))
     }
 
     let archs = try sut(inFramework: frameworkPath, log)
 
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
       .didLog(.normal, "[GetArchs]"),
       .didLog(.verbose, "- frameworkPath: \(frameworkPath.string)"),
       .didRunShellCommand("lipo path/to/Some.framework/Some -archs"),

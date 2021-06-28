@@ -8,20 +8,20 @@ final class LipoCreateTests: XCTestCase {
   }
 
   func testHappyPath() throws {
-    var performedActions = [Action]()
+    var didPerformActions = [Action]()
     let sut = LipoCreate.live(runShellCommand: .init { command, _ in
-      performedActions.append(.didRunShellCommand(command))
+      didPerformActions.append(.didRunShellCommand(command))
       return ""
     })
     let inputs = [Path("input/file1"), Path("input/file2")]
     let output = Path("output/file")
     let log = Log { level, message in
-      performedActions.append(.didLog(level, message))
+      didPerformActions.append(.didLog(level, message))
     }
 
     try sut(inputs: inputs, output: output, log)
 
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
       .didLog(.normal, "[LipoCreate]"),
       .didLog(.verbose, "- inputs: \n\t\(inputs.map(\.string).joined(separator: "\n\t"))"),
       .didLog(.verbose, "- output: \(output.string)"),

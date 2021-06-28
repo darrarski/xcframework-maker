@@ -8,20 +8,20 @@ final class RunShellCommandTests: XCTestCase {
   }
 
   func testHappyPath() throws {
-    var performedActions = [Action]()
+    var didPerformActions = [Action]()
     let shellOutput = "shell output"
     let sut = RunShellCommand.live(shellOut: { command in
-      performedActions.append(.didShellOut(command))
+      didPerformActions.append(.didShellOut(command))
       return shellOutput
     })
     let shellCommand = "shell command"
     let log = Log { level, message in
-      performedActions.append(.didLog(level, message))
+      didPerformActions.append(.didLog(level, message))
     }
 
     let result = try sut(shellCommand, log)
 
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
       .didLog(.normal, "[RunShellCommand]"),
       .didLog(.verbose, "- command: \(shellCommand)"),
       .didShellOut(shellCommand),

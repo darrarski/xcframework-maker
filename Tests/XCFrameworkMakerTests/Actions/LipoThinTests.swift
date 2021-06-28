@@ -8,21 +8,21 @@ final class LipoThinTests: XCTestCase {
   }
 
   func testHappyPath() throws {
-    var performedActions = [Action]()
+    var didPerformActions = [Action]()
     let sut = LipoThin.live(runShellCommand: .init { command, _ in
-      performedActions.append(.didRunShellCommand(command))
+      didPerformActions.append(.didRunShellCommand(command))
       return ""
     })
     let input = Path("input/file")
     let arch = Arch.arm64
     let output = Path("output/file")
     let log = Log { level, message in
-      performedActions.append(.didLog(level, message))
+      didPerformActions.append(.didLog(level, message))
     }
 
     try sut(input: input, arch: arch, output: output, log)
 
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
       .didLog(.normal, "[LipoThin]"),
       .didLog(.verbose, "- input: \(input.string)"),
       .didLog(.verbose, "- arch: \(arch.rawValue)"),

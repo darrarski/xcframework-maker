@@ -11,31 +11,31 @@ final class CopyFrameworkTests: XCTestCase {
   }
 
   func testHappyPath() throws {
-    var performedActions = [Action]()
+    var didPerformActions = [Action]()
     let sut = CopyFramework.live(
       createDir: .init { path, _ in
-        performedActions.append(.didCreateDir(path))
+        didPerformActions.append(.didCreateDir(path))
       },
       copyPath: .init { source, destination, _ in
-        performedActions.append(.didCopyPath(source, destination))
+        didPerformActions.append(.didCopyPath(source, destination))
       },
       deletePath: .init { path, _ in
-        performedActions.append(.didDeletePath(path))
+        didPerformActions.append(.didDeletePath(path))
       },
       lipoExtract: .init { input, archs, output, _ in
-        performedActions.append(.didLipoExtract(input, archs, output))
+        didPerformActions.append(.didLipoExtract(input, archs, output))
       }
     )
     let input = Path("input/Framework.framework")
     let archs = [Arch.i386, .arm64]
     let path = Path("output/path")
     let log = Log { level, message in
-      performedActions.append(.didLog(level, message))
+      didPerformActions.append(.didLog(level, message))
     }
 
     let output = try sut(input, archs: archs, path: path, log)
 
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
       .didLog(.normal, "[CopyFramework]"),
       .didLog(.verbose, "- input: \(input.string)"),
       .didLog(.verbose, "- archs: \(archs.map(\.rawValue).joined(separator: ", "))"),

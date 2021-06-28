@@ -8,19 +8,19 @@ final class DeletePathTests: XCTestCase {
   }
 
   func testHappyPath() throws {
-    var performedActions = [Action]()
+    var didPerformActions = [Action]()
     let sut = DeletePath.live(runShellCommand: .init { command, _ in
-      performedActions.append(.didRunShellCommand(command))
+      didPerformActions.append(.didRunShellCommand(command))
       return ""
     })
     let path = Path("some/path")
     let log = Log { level, message in
-      performedActions.append(.didLog(level, message))
+      didPerformActions.append(.didLog(level, message))
     }
 
     try sut(path, log)
 
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
       .didLog(.normal, "[DeletePath]"),
       .didLog(.verbose, "- path: \(path.string)"),
       .didRunShellCommand("rm -Rf some/path")

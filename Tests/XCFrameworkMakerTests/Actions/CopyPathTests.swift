@@ -8,21 +8,20 @@ final class CopyPathTests: XCTestCase {
   }
 
   func testHappyPath() throws {
-    var performedActions = [Action]()
+    var didPerformActions = [Action]()
     let sut = CopyPath.live(runShellCommand: .init { command, _ in
-      performedActions.append(.didRunShellCommand(command))
+      didPerformActions.append(.didRunShellCommand(command))
       return ""
     })
-
     let source = Path("source")
     let destination = Path("destination")
     let log = Log { level, message in
-      performedActions.append(.didLog(level, message))
+      didPerformActions.append(.didLog(level, message))
     }
 
     try sut(of: source, at: destination, log)
 
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
       .didLog(.normal, "[CopyPath]"),
       .didLog(.verbose, "- source: \(source.string)"),
       .didLog(.verbose, "- destination: \(destination.string)"),

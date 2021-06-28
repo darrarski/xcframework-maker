@@ -12,6 +12,7 @@ final class MakeXCFrameworkTests: XCTestCase {
   }
 
   func testHappyPath() throws {
+    var didPerformActions = [Action]()
     let iOSPath = Path("ios/Framework.framework")
     let tvOSPath = Path("tvos/Framework.framework")
     let createdTempDir = Path("temp/path")
@@ -23,35 +24,34 @@ final class MakeXCFrameworkTests: XCTestCase {
       iOSPath: Path("copy/ios/Framework.framework"),
       tvOSPath: Path("copy/tvos/Framework.framework")
     ]
-    var performedActions = [Action]()
     let sut = MakeXCFramework.live(
       createTempDir: .init { _ in
-        performedActions.append(.didCreateTempDir)
+        didPerformActions.append(.didCreateTempDir)
         return createdTempDir
       },
       getArchs: .init { path, _ in
-        performedActions.append(.didGetArchs(path))
+        didPerformActions.append(.didGetArchs(path))
         return archs[path]!
       },
       copyFramework: .init { input, archs, path, _ in
-        performedActions.append(.didCopyFramework(input, archs, path))
+        didPerformActions.append(.didCopyFramework(input, archs, path))
         return copiedFrameworks[input]!
       },
       addArm64Simulator: .init { device, simulator, _ in
-        performedActions.append(.didAddArm64Simulator(device, simulator))
+        didPerformActions.append(.didAddArm64Simulator(device, simulator))
       },
       createXCFramework: .init { frameworks, path, _ in
-        performedActions.append(.didCreateXCFramework(frameworks, path))
+        didPerformActions.append(.didCreateXCFramework(frameworks, path))
       }
     )
     let output = Path("output/path")
     let log = Log { level, message in
-      performedActions.append(.didLog(level, message))
+      didPerformActions.append(.didLog(level, message))
     }
 
     try sut.callAsFunction(iOS: iOSPath, tvOS: tvOSPath, arm64sim: true, at: output, log)
 
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
       .didLog(.normal, "[MakeXCFramework]"),
       .didLog(.verbose, "- iOSPath: \(iOSPath.string)"),
       .didLog(.verbose, "- tvOSPath: \(tvOSPath.string)"),

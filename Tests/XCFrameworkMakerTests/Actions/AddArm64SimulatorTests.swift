@@ -11,30 +11,30 @@ final class AddArm64SimulatorTests: XCTestCase {
   }
 
   func testHappyPath() throws {
-    var performedActions = [Action]()
+    var didPerformActions = [Action]()
     let sut = AddArm64Simulator.live(
       lipoThin: .init { input, arch, output, _ in
-        performedActions.append(.didLipoThin(input, arch, output))
+        didPerformActions.append(.didLipoThin(input, arch, output))
       },
       lipoCrate: .init { input, output, _ in
-        performedActions.append(.didLipoCreate(input, output))
+        didPerformActions.append(.didLipoCreate(input, output))
       },
       arm64ToSim: { path in
-        performedActions.append(.didArm64ToSim(path))
+        didPerformActions.append(.didArm64ToSim(path))
       },
       deletePath: .init { path, _ in
-        performedActions.append(.didDeletePath(path))
+        didPerformActions.append(.didDeletePath(path))
       }
     )
     let deviceFramework = Path("device/Framework.framework")
     let simulatorFramework = Path("simulator/Framework.framework")
     let log = Log { level, message in
-      performedActions.append(.didLog(level, message))
+      didPerformActions.append(.didLog(level, message))
     }
 
     try sut(deviceFramework: deviceFramework, simulatorFramework: simulatorFramework, log)
 
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
       .didLog(.normal, "[AddArm64Simulator]"),
       .didLog(.verbose, "- deviceFramework: \(deviceFramework.string)"),
       .didLog(.verbose, "- simulatorFramework: \(simulatorFramework.string)"),

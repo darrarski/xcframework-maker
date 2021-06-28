@@ -8,25 +8,24 @@ final class CreateTempDirTests: XCTestCase {
   }
 
   func testHappyPath() throws {
-    var performedActions = [Action]()
+    var didPerformActions = [Action]()
     let basePath = "temp/dir/base/path"
     let randomString = "random"
     let sut = CreateTempDir.live(
       basePath: basePath,
       randomString: { randomString },
       createDir: .init { path, _ in
-        performedActions.append(.didCreateDir(path))
+        didPerformActions.append(.didCreateDir(path))
       }
     )
-
     let log = Log { level, message in
-      performedActions.append(.didLog(level, message))
+      didPerformActions.append(.didLog(level, message))
     }
 
     let path = try sut(log)
 
     let expectedPath = Path(basePath).addingComponent("XCFrameworkMaker_\(randomString)")
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
       .didLog(.normal, "[CreateTempDir]"),
       .didCreateDir(expectedPath),
       .didLog(.verbose, "- path: \(path.string)")

@@ -9,13 +9,13 @@ final class CreateXCFrameworkTests: XCTestCase {
   }
 
   func testHappyPath() throws {
-    var performedActions = [Action]()
+    var didPerformActions = [Action]()
     let sut = CreateXCFramework.live(
       deletePath: .init { path, _ in
-        performedActions.append(.didDeletePath(path))
+        didPerformActions.append(.didDeletePath(path))
       },
       runShellCommand: .init { command, _ in
-        performedActions.append(.didRunShellCommand(command))
+        didPerformActions.append(.didRunShellCommand(command))
         return ""
       }
     )
@@ -25,12 +25,12 @@ final class CreateXCFrameworkTests: XCTestCase {
     ]
     let path = Path("output/path")
     let log = Log { level, message in
-      performedActions.append(.didLog(level, message))
+      didPerformActions.append(.didLog(level, message))
     }
 
     try sut(from: frameworks, at: path, log)
 
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
       .didLog(.normal, "[CreateXCFramework]"),
       .didLog(.verbose, "- frameworks: \n\t\(frameworks.map(\.string).joined(separator: "\n\t"))"),
       .didLog(.verbose, "- path: \(path.string)"),

@@ -8,21 +8,21 @@ final class LipoExtractTests: XCTestCase {
   }
 
   func testHappyPath() throws {
-    var performedActions = [Action]()
+    var didPerformActions = [Action]()
     let sut = LipoExtract.live(runShellCommand: .init { command, _ in
-      performedActions.append(.didRunShellCommand(command))
+      didPerformActions.append(.didRunShellCommand(command))
       return ""
     })
     let input = Path("input/file")
     let archs = [Arch.i386, .arm64]
     let output = Path("output/file")
     let log = Log { level, message in
-      performedActions.append(.didLog(level, message))
+      didPerformActions.append(.didLog(level, message))
     }
 
     try sut(input: input, archs: archs, output: output, log)
 
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
       .didLog(.normal, "[LipoExtract]"),
       .didLog(.verbose, "- input: \(input.string)"),
       .didLog(.verbose, "- archs: \(archs.map(\.rawValue).joined(separator: ", "))"),
