@@ -67,12 +67,22 @@ struct MainCommand: ParsableCommand {
   )
   var output: String
 
+  @Flag(
+    name: .customLong("verbose", withSingleDash: true),
+    help: ArgumentHelp(
+      "Log detailed info to standard output.",
+      discussion: "When this flag is provided, detailed information about each performed action is logged to standard output."
+    )
+  )
+  var verbose: Bool = false
+
   func run() throws {
     try Self.makeXCFramework(
       iOS: inputs.ios.map(Path.init(_:)),
       tvOS: inputs.tvos.map(Path.init(_:)),
       arm64sim: arm64sim,
-      at: Path(output)
+      at: Path(output),
+      verbose ? Log.live(level: .verbose) : nil
     )
   }
 }

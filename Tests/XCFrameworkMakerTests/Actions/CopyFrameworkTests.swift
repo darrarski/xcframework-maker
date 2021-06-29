@@ -7,35 +7,44 @@ final class CopyFrameworkTests: XCTestCase {
     case didCopyPath(Path, Path)
     case didDeletePath(Path)
     case didLipoExtract(Path, [Arch], Path)
+    case didLog(LogLevel, String)
   }
 
   func testHappyPath() throws {
-    var performedActions = [Action]()
+    var didPerformActions = [Action]()
     let sut = CopyFramework.live(
-      createDir: .init { path in
-        performedActions.append(.didCreateDir(path))
+      createDir: .init { path, _ in
+        didPerformActions.append(.didCreateDir(path))
       },
-      copyPath: .init { source, destination in
-        performedActions.append(.didCopyPath(source, destination))
+      copyPath: .init { source, destination, _ in
+        didPerformActions.append(.didCopyPath(source, destination))
       },
-      deletePath: .init { path in
-        performedActions.append(.didDeletePath(path))
+      deletePath: .init { path, _ in
+        didPerformActions.append(.didDeletePath(path))
       },
-      lipoExtract: .init { input, archs, output in
-        performedActions.append(.didLipoExtract(input, archs, output))
+      lipoExtract: .init { input, archs, output, _ in
+        didPerformActions.append(.didLipoExtract(input, archs, output))
       }
     )
     let input = Path("input/Framework.framework")
     let archs = [Arch.i386, .arm64]
     let path = Path("output/path")
+    let log = Log { level, message in
+      didPerformActions.append(.didLog(level, message))
+    }
 
-    let output = try sut(input, archs: archs, path: path)
+    let output = try sut(input, archs: archs, path: path, log)
 
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
+      .didLog(.normal, "[CopyFramework]"),
+      .didLog(.verbose, "- input: \(input.string)"),
+      .didLog(.verbose, "- archs: \(archs.map(\.rawValue).joined(separator: ", "))"),
+      .didLog(.verbose, "- path: \(path.string)"),
       .didCreateDir(Path("output/path")),
       .didCopyPath(Path("input/Framework.framework"), Path("output/path/Framework.framework")),
       .didDeletePath(Path("output/path/Framework.framework/Framework")),
-      .didLipoExtract(Path("input/Framework.framework/Framework"), [.i386, .arm64], Path("output/path/Framework.framework/Framework"))
+      .didLipoExtract(Path("input/Framework.framework/Framework"), [.i386, .arm64], Path("output/path/Framework.framework/Framework")),
+      .didLog(.verbose, "- output: \(output.string)")
     ])
     XCTAssertEqual(output, path.addingComponent(input.lastComponent))
   }

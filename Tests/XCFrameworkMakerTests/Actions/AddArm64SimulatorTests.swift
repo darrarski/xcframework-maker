@@ -7,30 +7,37 @@ final class AddArm64SimulatorTests: XCTestCase {
     case didLipoCreate([Path], Path)
     case didArm64ToSim(String)
     case didDeletePath(Path)
+    case didLog(LogLevel, String)
   }
 
   func testHappyPath() throws {
-    var performedActions = [Action]()
+    var didPerformActions = [Action]()
     let sut = AddArm64Simulator.live(
-      lipoThin: .init { input, arch, output in
-        performedActions.append(.didLipoThin(input, arch, output))
+      lipoThin: .init { input, arch, output, _ in
+        didPerformActions.append(.didLipoThin(input, arch, output))
       },
-      lipoCrate: .init { input, output in
-        performedActions.append(.didLipoCreate(input, output))
+      lipoCrate: .init { input, output, _ in
+        didPerformActions.append(.didLipoCreate(input, output))
       },
       arm64ToSim: { path in
-        performedActions.append(.didArm64ToSim(path))
+        didPerformActions.append(.didArm64ToSim(path))
       },
-      deletePath: .init { path in
-        performedActions.append(.didDeletePath(path))
+      deletePath: .init { path, _ in
+        didPerformActions.append(.didDeletePath(path))
       }
     )
     let deviceFramework = Path("device/Framework.framework")
     let simulatorFramework = Path("simulator/Framework.framework")
+    let log = Log { level, message in
+      didPerformActions.append(.didLog(level, message))
+    }
 
-    try sut(deviceFramework: deviceFramework, simulatorFramework: simulatorFramework)
+    try sut(deviceFramework: deviceFramework, simulatorFramework: simulatorFramework, log)
 
-    XCTAssertEqual(performedActions, [
+    XCTAssertEqual(didPerformActions, [
+      .didLog(.normal, "[AddArm64Simulator]"),
+      .didLog(.verbose, "- deviceFramework: \(deviceFramework.string)"),
+      .didLog(.verbose, "- simulatorFramework: \(simulatorFramework.string)"),
       .didLipoThin(Path("device/Framework.framework/Framework"), .arm64, Path("simulator/Framework.framework/Framework-arm64")),
       .didArm64ToSim("simulator/Framework.framework/Framework-arm64"),
       .didLipoCreate([Path("simulator/Framework.framework/Framework"), Path("simulator/Framework.framework/Framework-arm64")], Path("simulator/Framework.framework/Framework")),

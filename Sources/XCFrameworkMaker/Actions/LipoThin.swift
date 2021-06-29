@@ -1,15 +1,16 @@
 /// Use lipo to create thin binary file with provided architecture
 public struct LipoThin {
-  var run: (Path, Arch, Path) throws -> Void
+  var run: (Path, Arch, Path, Log?) throws -> Void
 
   /// Create thin binary file with provided architecture
   /// - Parameters:
   ///   - input: Path to the input file
   ///   - arch: Architecture to be included in the output
   ///   - output: Path to the output file
+  ///   - log: Log action (defaults to nil for no logging)
   /// - Throws: Error
-  public func callAsFunction(input: Path, arch: Arch, output: Path) throws {
-    try run(input, arch, output)
+  public func callAsFunction(input: Path, arch: Arch, output: Path, _ log: Log? = nil) throws {
+    try run(input, arch, output, log)
   }
 }
 
@@ -17,8 +18,15 @@ public extension LipoThin {
   static func live(
     runShellCommand: RunShellCommand = .live()
   ) -> Self {
-    .init { input, arch, output in
-      _ = try runShellCommand("lipo \(input.string) -thin \(arch.rawValue) -output \(output.string)")
+    .init { input, arch, output, log in
+      log?(.normal, "[LipoThin]")
+      log?(.verbose, "- input: \(input.string)")
+      log?(.verbose, "- arch: \(arch.rawValue)")
+      log?(.verbose, "- output: \(output.string)")
+      _ = try runShellCommand(
+        "lipo \(input.string) -thin \(arch.rawValue) -output \(output.string)",
+        log?.indented()
+      )
     }
   }
 }

@@ -40,7 +40,7 @@ added as a dependency to your Swift Package. Optionally arm64-simulator support 
 the resulting XCFramework, so it can be used on M1 Mac without the need to run Xcode through
 Rosetta.
 
-USAGE: make-xcframework [-ios <path>] [-tvos <path>] [-arm64sim] -output <path>
+USAGE: make-xcframework [-ios <path>] [-tvos <path>] [-arm64sim] -output <path> [-verbose]
 
 OPTIONS:
   -ios <path>             iOS input framework path.
@@ -55,6 +55,9 @@ OPTIONS:
   -output <path>          Output directory path.
         Provide a path to a directory where the resulting XCFramework should be created. Eg
         "path/to/output/directory"
+  -verbose                Log detailed info to standard output.
+        When this flag is provided, detailed information about each performed action is logged to
+        standard output.
   -help, -h               Show help information.
 ```
 

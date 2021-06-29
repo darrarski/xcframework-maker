@@ -1,12 +1,14 @@
 /// Creates directory
 public struct CreateDir {
-  var run: (Path) throws -> Void
+  var run: (Path, Log?) throws -> Void
 
   /// Create directory at provied path
-  /// - Parameter path: Path of the directory to create
+  /// - Parameters:
+  ///   - path: Path of the directory to create
+  ///   - log: Log action (defaults to nil for no logging)
   /// - Throws: Error
-  public func callAsFunction(_ path: Path) throws {
-    try run(path)
+  public func callAsFunction(_ path: Path, _ log: Log? = nil) throws {
+    try run(path, log)
   }
 }
 
@@ -14,8 +16,10 @@ public extension CreateDir {
   static func live(
     runShellCommand: RunShellCommand = .live()
   ) -> Self {
-    .init { path in
-      _ = try runShellCommand("mkdir -p \(path.string)")
+    .init { path, log in
+      log?(.normal, "[CreateDir]")
+      log?(.verbose, "- path: \(path.string)")
+      _ = try runShellCommand("mkdir -p \(path.string)", log?.indented())
     }
   }
 }
