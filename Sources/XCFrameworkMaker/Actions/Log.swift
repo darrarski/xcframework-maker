@@ -1,6 +1,11 @@
+/// Logs messages
 public struct Log {
   var run: (LogLevel, String) -> Void
 
+  /// Log message
+  /// - Parameters:
+  ///   - level: Log level
+  ///   - message: Message to be logged
   public func callAsFunction(_ level: LogLevel, _ message: String) {
     run(level, message)
   }
@@ -18,7 +23,9 @@ public extension Log {
   }
 }
 
-extension Log {
+public extension Log {
+  /// Returns modified Log that indents messages with a tab character
+  /// - Returns: Log
   func indented() -> Self {
     .init { level, message in
       let indentation = "\t"
